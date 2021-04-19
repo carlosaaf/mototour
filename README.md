@@ -26,7 +26,13 @@ Para criar as tabelas do banco dados basta executar o script create_database.sql
 
 ```
 mysql -u mototour -p < script/create_database.sql
-``` 
+```
+
+Se desejar colocar alguns dados iniciais, execute o comando abaixo. Ele criará 3 passeios com dados fictícios.
+
+```
+mysql -u mototour -p < script/load_data.sql
+```
 
 ### PHP
 
