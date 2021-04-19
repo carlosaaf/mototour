@@ -38,6 +38,32 @@ class TourRepository
         return $result;
     }
 
+    public function saveTour($id, $name, $description, $photo) {
+        if ($id == 0) {
+            $stmt = $this->conn->prepare("INSERT INTO tour (name, description, photo) VALUES (?, ?, ?) RETURNING id");
+            $stmt->bind_param('sss', $name, $description, $photo);
+            $stmt->execute();
+            $stmt->bind_result($id);
+            if ($stmt->fetch()) {
+                $result = $id;
+            } else {
+                $result = false;
+            }
+            $stmt->close();
+            return $result;
+        } else {
+            $stmt = $this->conn->prepare("UPDATE tour SET name = ?, description = ?, photo = ? WHERE id = ?");
+            $stmt->bind_param('sssi', $name, $description, $photo, $id);
+            if ($stmt->execute()) {
+                $result = $id;
+            } else {
+                $result = false;
+            }
+            $stmt->close();
+            return $result;
+        }
+    }
+
     function __destruct()
     {
         $this->conn->close();

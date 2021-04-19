@@ -159,12 +159,28 @@ class TourController
         $name = $body[1];
         $description = $body[2];
         $photo = $body[3];
+        $title = "Salvando o passeio";
 
+        $repo = new TourRepository();
+        $result = $repo->saveTour($id, $name, $description, $photo);
+        unset($repo);
+
+        if (!$result) {
+            return PageController::header()
+                . TourController::showHeader($title)
+                . <<<HTML
+                    <div class="alert alert-danger text-center" role="alert">
+                        Erro ao salvar o passeio!
+                    </div>
+                    <p><a href="/tours" class="btn btn-primary">Voltar<a/></p>
+                HTML
+                . PageController::footer();
+        }
         return PageController::header()
             . TourController::showHeader($name)
             . <<<HTML
                 <p>Passeio salvo</p>
-                <p><a href="/tours/{$id}/edit" class="btn btn-primary">Voltar<a/></p>
+                <p><a href="/tours/{$result}/edit" class="btn btn-primary">Voltar<a/></p>
             HTML
             . PageController::footer();
     }
